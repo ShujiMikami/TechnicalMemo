@@ -1,4 +1,7 @@
 \documentclass{jsarticle}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true,linkcolor=blue}
 
 \title{MacPro1,1(2006) El Capitan インストール}
 
@@ -6,14 +9,16 @@
 \maketitle
 
 \section{背景}
-実家で眠っていたMacPro2006は, Xeonの2.66GHz CPUをデュアルで搭載し, HDDベイは4つ, メモリベイは8あり, HW的性能, 拡張性ともに, 実使用中のMacminiや, MacBookAirと比較しても全く見劣りしない. 
-また, メモリも今では古い, DDR2-FBという規格のものであり, 大容量のメモリが格安で手に入る. 今回は, 32GBを約1万円で購入した. 
+実家で眠っていたMacPro2006は, Xeonの2.66GHz CPUをデュアルで搭載し, HDDベイは4つ, メモリベイは8あり, HW的性能, 拡張性ともに, 実使用中のMacminiや, MacBookAirと比較しても全く見劣りしないか勝っている\cite{MacPro_Doc}. 
+また, メモリも今では古い, DDR2-FBという規格のものであり, 大容量のメモリが格安で手に入る. 今回は, Amazonで, 32GBを約1万円で購入した. 
 
 一方で, 搭載されていたOSは, OS10.4(Tiger)であり, 日常的に利用しているソフトウェアがほとんどインストールできない. 
-また, MacPro2006はそのHW特性上, 無条件でアップグレードできるのは, 10.7(Lion)までであるが, 
+また, MacPro2006はそのHW特性上, 無条件でアップグレードできるのは, 10.7(Lion)までである\cite{EFI_Issue_Doc}が, 
 OSXは, 10.8(Mountain Lion)以前のものはアップグレードが無償でなく, 購入しなければならない. 
 
-普通であればここでもう, MacPro2006は寿命を終える, ということになるが, ネット上の情報によると, 10.11(El Capitan)までは頑張ればアップグレード可能であると言われている. 
+普通であればここでもう, MacPro2006は寿命を終える, ということになるが, ネット上の情報によると, 10.11(El Capitan)までは頑張ればアップグレード可能であると言われている\cite{Summary_Doc}. 
+
+なお, El Capitanの次以降の, Sierra, High Sierraについては, SSE4.1 という仕組みが必要で, そこまでいくと, もはやMacPro2006は, HWレベルでサポート外になり, 不可能らしい\cite{Summary_Doc}
 
 \section{概要}
 今回, 先行情報に基づき, El Capitanまでのアップグレードを行うことに成功したが, いくつか引っかかる部分もあったので, 備忘録も兼ねて残しておく. 
@@ -24,8 +29,8 @@ El Capitanが普通にインストール可能なMacがあれば, そのPCに, M
 \section{制約}
 所詮は裏技なので, El Capitanのインストールができたとはいえ, 制約がある. 
 \begin{itemize}
-    \item OSのセキュリティアップデートをしてはいけない
-    \item Sierraへのアップグレードはできない
+  \item OSのセキュリティアップデートをしてはいけない\cite{Security_Update_Issue_Doc}
+  \item Sierraへのアップグレードはできない\cite{Summary_Doc}
 \end{itemize}
 つまりは, インストールした段階よりも新しくはできない, ということである. 
 最新の環境を使いたいなら, それに対応したマシンを買うしかない. 
@@ -36,13 +41,13 @@ El Capitanが普通にインストール可能なMacがあれば, そのPCに, M
 boot.efiを再ロックかけてもちゃんと動くのか. 
 
 \section{MacPro2006のOS制限}
-MacPro2006は, 10.7(Lion)までしかインストールできない. これは, かなり根っこの部分のアーキテクチャが, 変わっていることによる. 
+MacPro2006は, 10.7(Lion)までしかインストールできない\cite{EFI_Issue_Doc}. これは, かなり根っこの部分のアーキテクチャが, 変わっていることによる. 
 Macは, PowerPCから, Intelアーキテクチャに移行した際, ファームウェアとOSの間に, EFI(Extensible Firmware Interface)を挟む構造となった(Snow Leopardかららしい). 
-そして, OSのアーキテクチャが, 10.8以降, 完全に64bit化したことにより, EFIも64bitのものになっていなければならず, EFIが32bitのマシンは, Lion以降のアップグレードができなくなったというわけである. 
+そして, OSのアーキテクチャが, 10.8以降, 完全に64bit化した\cite{EFI_Issue_Doc}ことにより, EFIも64bitのものになっていなければならず, EFIが32bitのマシンは, Lion以降のアップグレードができなくなったというわけである. 
 
 \section{MacPro2006のアップグレード可能性}
-一方で, MacのHWは, Intelアーキテクチャに移行した初期段階から, HWとしては64bitに対応したものとなっており, 原理的には64bit動作が可能である. 
-つまり, EFIだけが, 32bitの皮をかぶっているに過ぎない. そこに目をつけて, 32bitEFIを64bitEFIとしてふるまうようにラッピング構造を作った人(Pike氏 https://pikeralpha.wordpress.com)がおり, 
+一方で, MacのHWは, Intelアーキテクチャに移行した初期段階から, HWとしては64bitに対応したものとなっており\cite{MacPro_Doc}, 原理的には64bit動作が可能である. 
+つまり, EFIだけが, 32bitの皮をかぶっているに過ぎない. そこに目をつけて, 32bitEFIを64bitEFIとしてふるまうようにラッピング構造を作った人がおり\cite{Pike}, 
 そこから派生した様々な手法が確立され, ネット上に拡散することとなった. 
 
 \section{基本コンセプト}
@@ -53,8 +58,8 @@ OSXのディレクトリ構造の中に, OSを起動する際のEFIが, boot.efi
 
 \section{前提条件}
 グラフィックカードが, 64bitEFI, 32bitEFI両対応している必要がある. 
-デフォルトでついている, GeForce7300は, 32bitにしか対応していないため, 使用できない. 
-今回は, MacPro2008の購入オプションとして存在した, ATI Radeon 5770 for Macを用意した. ATI Radeon 5770は, いくつか種類があるが, for Macであれば, 一切の追加作業なくあっさり動く. メルカリで8000円で入手. 
+デフォルトでついている, GeForce7300は, 32bitにしか対応していないため, 使用できない\cite{Graphics_Board_Doc}. 
+今回は, MacPro2008の購入オプションとして存在した, ATI Radeon 5770 for Macを用意した. ATI Radeon 5770は, いくつか種類がある\cite{Alternative_GPU}が, for Macであれば, 一切の追加作業なくあっさり動く. メルカリで8000円で入手. 
 
 \section{本備忘録で採用した方法}
 様々な手法の中で, 最も直感的にやっていることが理解しやすい方法を示す. 
@@ -67,7 +72,7 @@ El Capitanを普通にインストールすることが可能なマシンで, Ma
 El Capitanがインストール可能なMacが別に存在している必要がある(仮想環境でなんとかしている人もいた). 
 今回は, MacBookAir Mid2011を使用した. 
 ネット上の記事によっては, El Capitanがインストールされていないとダメ, という情報もあるが, それはガセ. 
-今回の作業においては, High Sierraが入っていた. 
+今回の作業においては, MacBookAirには, High Sierraが入っていた. 
 
 \subsubsection{SATA-USB変換機}
 MacProの起動ドライブを取り出し, 上記Macに直接つなぐので, SATA-USBトランシーバーが必要になる. 
@@ -83,7 +88,7 @@ El CapitanをHDDにインストールするためのメディアが必要.
 \subsubsection{El Capitanのダウンロード}\label{sequence_download}
 別Macで作業する. 
 Appleの公式サイトで, El Capitanをダウンロードする. 
-https://support.apple.com/ja-jp/HT206886
+\url{https://support.apple.com/ja-jp/HT206886}
 
 ネットの情報ソースによっては, 過去にダウンロードしたことがあれば, AppleStoreの購入済みから, ダウンロードするのもよい, となっているが, 
 今回, それでダウンロードしたEl Capitanのインストーラで, 先に進めると, インストールの際に, 「インストールできるパッケージがありません」というエラーが出て, インストールができなかった. 公式HPからのダウンロードをしたほうがよい. 
@@ -95,7 +100,7 @@ https://support.apple.com/ja-jp/HT206886
 
 しかし, このインストーラは, El Capitanよりも新しい環境では実行することができず, 「インストールするにはOSが新しすぎます」というエラーメッセージが出る. 
 そこで, このインストーラから, PC起動時に実行可能なブータブルメディアを作成する. その方法は, 公式にあり, 
-https://support.apple.com/ja-jp/HT201372
+\url{https://support.apple.com/ja-jp/HT201372}
 に記述があるように, createinstallmediaというコマンドを実行することでできる.
 Volumes/MyVolumeを, USBメモリのパスに置き換える. 
 ターミナルに, Doneと表示されるまでしばらく待つ. 
@@ -113,8 +118,8 @@ Volumes/MyVolumeを, USBメモリのパスに置き換える.
 \subsubsection{El Capitanのboot.efiを, Pike氏のboot.efiに入れ替え}
 別Macで作業する. 
 別Macを, 本体のOSで起動し, El CapitanのHDDをボリュームとして認識している状態にする. 
-Pike氏のHP(https://pikeralpha.wordpress.com/macosxbootloader/)から, boot.efiをダウンロードする. 
-https://ameblo.jp/crabman/entry-12107497168.html が参考になるが, いつ消えるかもわからないので, 一応書いておくと, 
+Pike氏のHP\cite{Pike}から, boot.efiをダウンロードする. 
+作業の参考に最も適したサイト\cite{Easiest_Reference}の通りに実行できれば成功するが, いつ消えるかもわからないので, 一応書いておくと, 
 El Capitanのディレクトリ内の, 
 System/Library/CoreServiceに, boot.efiがある. 
 これを入れ替えるのだが, ロックされているファイルのため, ロックを外す. 
@@ -124,7 +129,7 @@ sudo chflags nouchg (boot.efiのフルパス, ドラッグアンドドロップ�
 
 を入力する. 
 すると, finderの見た目でもロックが外れるので, Pike氏のboot.efiに入れ替える. 
-ここで, 参考サイトでは, 
+ここで, 参考サイト\cite{Easiest_Reference}では, 
 
 sudo chflags uchg (boot.efiのフルパス, ドラッグアンドドロップで行けるのは知らなかった)
 
@@ -138,15 +143,59 @@ usr/standalone/i386 の中にも, boot.efiがあり, 同様に置き換える. �
 別Macで, HDDをアンマウントし, MacProにセットし, 起動する. 従来のOSが入ったドライブは取り除いておく. 
 ここで, 一度目は, ?マークのフォルダが表示され, OSが認識されなかった. いろいろと原因を調べたが, blessだったり, 権限修復だったり, どれもうまくいかないものばかりで, 
 結局, 何もやり方を変えていないにもかかわらず, 同じことを繰り返したところ, うまくいった. どこかで致命的にミスをしただけかもしれないが, 
-単純にやり直すという手が今のところ有効. 参考サイト(https://ameblo.jp/crabman/entry-12107497168.html)のコメント欄にも, 同様の症状を訴えている人がいるが, 結局明確な理由はわかっていない. 
+単純にやり直すという手が今のところ有効. 参考サイト\cite{Easiest_Reference}のコメント欄にも, 同様の症状を訴えている人がいるが, 結局明確な理由はわかっていない. 
 
 ただ, この症状に陥ったHDDから, 別MacをEl Capitan起動しようとしたところ, 正常に起動できなかったので, 何かが失敗している可能性が高い. 
 
 \subsection{後処理}
 \subsubsection{スリープモードの設定変更}
-http://blog.livedoor.jp/maxcov/archives/65830907.html にあるように, MacProは, DDR2メモリに熱問題を抱えており, スリープモードを, ディープスリープに切り替えねばならないらしい. そこで, 
+MacProは, DDR2メモリに熱問題を抱えており, スリープモードを, ディープスリープに切り替えねばならないらしい\cite{SleepMode_Issue_Doc}. そこで, 
 sudo pmset -a hibernatemode X のコマンドを, Xを25に置き換えて実行する. 
 
 \subsubsection{自動アップデートの停止}
-ここまでの手法で, El Capitanのインストールに成功したMacProでは, https://mactki.exblog.jp/25833114/ にある通り, 2018-001のセキュリティアップデートをかけると起動できなくなるらしい. 自動アップデートを停止しておく. 
+ここまでの手法で, El Capitanのインストールに成功したMacProでは, 2018-001のセキュリティアップデートをかけると起動できなくなるらしい\cite{Security_Update_Issue_Doc}. 自動アップデートを停止しておく. 
+
+
+\begin{thebibliography}{9}
+
+  \bibitem{MacPro_Doc}
+  "Mac Pro". 4.1 Mac Pro(1st Generation) .
+  \url{https://ja.wikipedia.org/wiki/Mac_Pro#Mac_Pro_(1st_Generation)}
+
+\bibitem{EFI_Issue_Doc}
+  Mr. Zaniwoop. "2006/2007 Mac Pro (1,1/2,1) and OS X El Capitan". comment on Jun 8, 2015. Section "Background". 
+  \url{https://forums.macrumors.com/threads/2006-2007-mac-pro-1-1-2-1-and-os-x-el-capitan.1890435/}
+
+\bibitem{Summary_Doc}
+  Mr. Zaniwoop. "2006/2007 Mac Pro (1,1/2,1) and OS X El Capitan". comment on Jun 8, 2015. Section "How can these Macs run El Capitan?" 
+  \url{https://forums.macrumors.com/threads/2006-2007-mac-pro-1-1-2-1-and-os-x-el-capitan.1890435/}
+
+
+\bibitem{Security_Update_Issue_Doc}
+  Mr. Zaniwoop. "2006/2007 Mac Pro (1,1/2,1) and OS X El Capitan". comment on Jun 8, 2015. Section "Security Update 2018-001 for Mac OS X El Capitan" 
+  \url{https://forums.macrumors.com/threads/2006-2007-mac-pro-1-1-2-1-and-os-x-el-capitan.1890435/}
+
+
+\bibitem{Pike}
+  "Pike's Universum". Macosxbootloader .
+  \url{https://pikeralpha.wordpress.com/macosxbootloader/}
+
+\bibitem{Graphics_Board_Doc}
+  "MacPro 2006 純正RadeonHD 5770". 
+  \url{https://ameblo.jp/crabman/entry-12110818376.html}
+
+\bibitem{Easiest_Reference}
+  "Mac Pro 2006にEl Capitanインストール成功". 
+  \url{https://ameblo.jp/crabman/entry-12107497168.html}
+
+\bibitem{SleepMode_Issue_Doc}
+  "初代MacProでOS X10.11 El Capitanの落とし穴". 
+  \url{http://blog.livedoor.jp/maxcov/archives/65830907.html}
+
+\bibitem{Alternative_GPU}
+  "MacPro A1186(2006) – RADEON HD5770". 
+  \url{http://blog.pdns.jp/macpro-a11862006-radeon-hd5770/}
+
+
+\end{thebibliography}
 \end{document}
