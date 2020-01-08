@@ -1,0 +1,53 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{colorlinks=true,linkcolor=blue}
+
+\title{MacPro1,1(2006) El Capitan に, neovimをインストール}
+
+\begin{document}
+\maketitle
+
+\section{背景}
+MacPro2006に, El Capitanのインストールが成功した.
+一方で, 最近テキスト編集環境を, vimから, neovimに乗換を進めており, MacPro2006に対しても, neovimを入れることにした. 
+しかし, El Capitanとはいえ, もはや2020年1月時点では, 4世代前のOSであり, いくつか引っかかる点が出てしまったので, 
+ここに記録する. 
+
+\section{概要}
+neovimをインストールし, checkhelthがOKになるまでのインストール作業を記録する. 
+
+\section{結論}
+ホームページのバイナリインストーラは使えないものの, Homebrewを使用したインストールは可能. 
+pythonのSSL認証が失敗するが, アップデートコマンドで対応可能. 
+
+\section{制約}
+これと言ってない
+
+\section{残存不明点}
+発生した問題が, El Capitan要因なのか, それともハードウェア要因なのか原因がわからない
+
+\subsection{作業概要}
+Homebrewでneovimをインストールし, python2, python3をインストール, pythonのSSL認証をアップグレード
+
+\subsection{手順}
+\subsubsection{neovimのインストール}
+普通は, neovimプロジェクトのホームページから, バイナリをダウンロードすればよい. 
+事実, High SierraがインストールされているMacBookAirや, Windows10マシンでは問題なく成功した. 
+しかし, MacPro2006では, ダウンロードして解凍したバイナリを実行しようとしても, Illegal Instraction 4というメッセージが出て, 起動できなかったり, ファイルが壊れていて実行できない, などのメッセージで実行できない. 
+ネットで見る限り, コンパイラのバージョンが新しいがゆえに, OSが理解できないメッセージが含まれている, とのことで, おそらくEl Capitan依存なのだろうと考えられる. 
+つまりは, ソースからビルドすれば動くと思われ, Homebrewでのインストールに切り替えた. 
+結果, かなり時間がかかったものの, 無事, 最新リリースである, 0.4.3がインストールされた. 
+
+\subsubsection{pythonのインストール}
+全く問題ない. ホームページから最新バイナリインストーラを持ってきてインストールするだけ
+
+\subsubsection{pythonのSSL認証をアップグレード}
+ここで, 普通であれば, pipで, pynvimをインストールして完了となるはずであるが, pipでのインストールを行おうとすると, 大量のエラーを吐き, 失敗する. 
+エラー内容の中に, SSL: CERTIFICATE\_VERIFY\_FAILEDというメッセージがあり, これで検索してみると, いくつか情報が見つかるが, 
+https://qiita.com/TakahiroNozawa/items/89e80201843c681f6e87
+がわかりやすく, いう通り, pip install --upgrade certifiを, pip2, pip3それぞれで実行してやれば, 無事, pynvimをインストールできる. 
+なんでなのかは未調査
+
+
+\end{document}
