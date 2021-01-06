@@ -1,3 +1,13 @@
 VimMemo.txt~
 .VimMemo.txt.un~
 .VimMemo.txt.swp
+MacProResurrection/MacProResurrection.pdf
+*.tex~
+*.un~
+*.gz
+MacProResurrection/MacProResurrection_neovim_install.pdf
+MacProResurrection/MacProResurrection_neovim_install.log
+MacProResurrection/MacProResurrection_neovim_install.fdb_latexmk
+MacProResurrection/MacProResurrection_neovim_install.aux
+MacProResurrection/MacProResurrection_neovim_install.out
+MacProResurrection/MacProResurrection_neovim_install.dvi
